@@ -50,7 +50,7 @@ curl -X GET --location "http://localhost:8080/api/v1/applications" \
 * download pdf file by id to /tmp/file.pdf:
 
 ```bash
-curl -X GET --location "http://localhost:8080/api/v1/applications/7/reports/pdf" \
+curl -X GET --location "http://localhost:8080/api/v1/applications/1/reports/pdf" \
     -H "Content-Type: application/json" \
     --output /tmp/file.pdf
 ```

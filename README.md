@@ -1,13 +1,64 @@
 # AM Coding Challenge - Backend (Java)
 
 ## How to run:
+
 1. Build docker image:
+
 ```bash
 ./mvnw clean package spring-boot:build-image -Dspring-boot.build-image.imageName=am_challenge:latest
 ```
+
 2. Run docker compose:
+
 ```bash
 docker-compose up -d
+```
+
+3. Run curl commands
+    * create application
+
+```bash
+curl -X POST --location "http://localhost:8080/api/v1/applications" \
+    -H "Content-Type: application/json" \
+    -d "{
+          \"email\": \"myemail@gmail.com\",
+          \"name\": \"DenisV\",
+          \"githubUser\": \"DenisVabishchevich\",
+          \"projects\": [
+            {
+              \"name\": \"Super Project\",
+              \"employmentMode\": \"EMPLOYED\",
+              \"capacity\": \"FULL_TIME\",
+              \"duration\": \"PT840H\",
+              \"startYear\": 2022,
+              \"role\": \"Software Developer\",
+              \"teamSize\": 10,
+              \"repositoryUrl\": \"www.repo-url.com\",
+              \"lifeUrl\": \"www.life.com\"
+            }
+          ]
+        }"
+```
+
+* find all applications:
+
+```bash
+curl -X GET --location "http://localhost:8080/api/v1/applications" \
+    -H "Content-Type: application/json"
+```
+
+* download pdf file by id to /tmp/file.pdf:
+
+```bash
+curl -X GET --location "http://localhost:8080/api/v1/applications/7/reports/pdf" \
+    -H "Content-Type: application/json" \
+    --output /tmp/file.pdf
+```
+
+4. Stop docker compose:
+
+```bash
+docker-compose down 
 ```
 
 ## The case study: Application review

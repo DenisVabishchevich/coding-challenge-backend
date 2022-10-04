@@ -4,8 +4,8 @@ services:
     image: docker.io/library/am_challenge:latest
     container_name: service
     depends_on:
-      - broker
-      - db
+      broker:
+        condition: service_healthy
     ports:
       - '8080:8080'
     environment:
@@ -42,10 +42,15 @@ services:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: 'PLAINTEXT:PLAINTEXT,PLAINTEXT_INTERNAL:PLAINTEXT'
-      KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://localhost:9092,PLAINTEXT_INTERNAL://broker:29092'
+      KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://broker:9092,PLAINTEXT_INTERNAL://broker:29092'
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+    healthcheck:
+      test: [ "CMD", "kafka-topics", "--bootstrap-server", "broker:9092", "--list" ]
+      interval: 30s
+      timeout: 10s
+      retries: 10
 volumes:
   db:
     driver: local

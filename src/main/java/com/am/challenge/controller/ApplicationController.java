@@ -5,7 +5,7 @@ import com.am.challenge.service.ApplicationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -22,7 +22,7 @@ public class ApplicationController {
     private final ApplicationService applicationService;
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PutMapping
+    @PostMapping
     ApplicationDto createApplication(@RequestBody @Valid ApplicationDto dto) {
         log.debug("Create application for user: {}", dto.getGithubUser());
         return applicationService.createAndSendApplication(dto);

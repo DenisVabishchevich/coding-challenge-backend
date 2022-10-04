@@ -19,7 +19,7 @@ import java.util.List;
 public class ApplicationDto {
     private Long id;
     @Email
-    private String eMail;
+    private String email;
     @NotEmpty
     private String name;
     @NotEmpty

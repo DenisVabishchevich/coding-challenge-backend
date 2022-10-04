@@ -26,7 +26,7 @@ public class Application extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String eMail;
+    private String email;
     private String name;
     private String githubUser;
 

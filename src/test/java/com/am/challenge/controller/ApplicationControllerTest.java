@@ -18,7 +18,7 @@ import java.time.Duration;
 import java.util.List;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ActiveProfiles("tetst")
+@ActiveProfiles("test")
 @AutoConfigureWebTestClient(timeout = "PT60S")
 class ApplicationControllerTest {
 
@@ -26,17 +26,41 @@ class ApplicationControllerTest {
     private WebTestClient client;
 
     @MockBean
-    private KafkaTemplate<String, String> kafkaTemplate;
+    private KafkaTemplate<String, Object> kafkaTemplate;
 
     @Test
     void createApplicationTest() {
 
         client
-            .put()
+            .post()
             .uri("/api/v1/applications")
             .bodyValue(ApplicationDto.builder()
                 .name("DenisV")
-                .eMail("myemail@gmail.com")
+                .email("myemail@gmail.com")
+                .githubUser("DenisVabishchevich")
+                .projects(List.of(PastProjectDto.builder()
+                    .capacity(Capacity.FULL_TIME)
+                    .duration(Duration.ofDays(35))
+                    .employmentMode(EmploymentMode.EMPLOYED)
+                    .name("Super Project")
+                    .role("Software Developer")
+                    .startYear(2022)
+                    .teamSize(10)
+                    .lifeUrl("www.life.com")
+                    .repositoryUrl("www.repo-rul.com")
+                    .build()))
+                .build())
+            .exchange()
+            .expectStatus().isCreated()
+            .expectBody()
+            .consumeWith(System.out::println);
+
+        client
+            .post()
+            .uri("/api/v1/applications")
+            .bodyValue(ApplicationDto.builder()
+                .name("DenisV")
+                .email("myemail@gmail.com")
                 .githubUser("DenisVabishchevich")
                 .projects(List.of(PastProjectDto.builder()
                     .capacity(Capacity.FULL_TIME)
@@ -49,9 +73,12 @@ class ApplicationControllerTest {
                     .build()))
                 .build())
             .exchange()
-            .expectStatus().isCreated();
+            .expectStatus().isCreated()
+            .expectBody()
+            .consumeWith(System.out::println);
 
-        Mockito.verify(kafkaTemplate).send("topic", "key", "value");
+        Mockito.verify(kafkaTemplate, Mockito.times(2))
+            .send(Mockito.eq("compliance-department-topic"), Mockito.anyString(), Mockito.any(ApplicationDto.class));
     }
 
 }

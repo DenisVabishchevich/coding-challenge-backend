@@ -5,6 +5,8 @@ import com.am.challenge.dto.ApplicationDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring", uses = PastProjectMapperMapper.class)
 public interface ApplicationMapper {
 
@@ -17,4 +19,6 @@ public interface ApplicationMapper {
 
     @Mapping(target = "email", source = "email")
     ApplicationDto toDto(Application application);
+
+    List<ApplicationDto> toDto(Iterable<Application> applications);
 }

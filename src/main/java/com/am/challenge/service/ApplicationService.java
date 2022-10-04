@@ -10,6 +10,8 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class ApplicationService {
@@ -41,5 +43,11 @@ public class ApplicationService {
         // we should use Transaction outbox patter https://microservices.io/patterns/data/transactional-outbox.html for sending messages
         kafkaTemplate.send("compliance-department-topic", response.getId().toString(), response);
         return response;
+    }
+
+    @Transactional(readOnly = true)
+    public List<ApplicationDto> findAllApplications() {
+        List<Application> allWithProjects = applicationRepository.findWithProjectsAllBy();
+        return mapper.toDto(allWithProjects);
     }
 }

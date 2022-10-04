@@ -1,7 +1,7 @@
 package com.am.challenge.service;
 
 import com.am.challenge.dto.ApplicationDto;
-import com.am.challenge.dto.CreateApplicationRequest;
+import com.am.challenge.repository.ApplicationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
@@ -11,8 +11,11 @@ import org.springframework.stereotype.Service;
 public class ApplicationService {
 
     private final KafkaTemplate<String, String> kafkaTemplate;
+    private final ApplicationRepository applicationRepository;
 
-    public ApplicationDto createAndSendApplication(CreateApplicationRequest request) {
+    public ApplicationDto createAndSendApplication(ApplicationDto dto) {
+
+        //TODO check existing name
 
         // this is distributed transaction
         // we should use Transaction outbox patter https://microservices.io/patterns/data/transactional-outbox.html for sending messages

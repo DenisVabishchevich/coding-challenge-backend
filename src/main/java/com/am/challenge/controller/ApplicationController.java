@@ -1,7 +1,6 @@
 package com.am.challenge.controller;
 
 import com.am.challenge.dto.ApplicationDto;
-import com.am.challenge.dto.CreateApplicationRequest;
 import com.am.challenge.service.ApplicationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,8 +23,8 @@ public class ApplicationController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PutMapping
-    ApplicationDto createApplication(@RequestBody @Valid CreateApplicationRequest request) {
-        log.debug("Create application for user: {}", request.getGithubUser());
-        return applicationService.createAndSendApplication(request);
+    ApplicationDto createApplication(@RequestBody @Valid ApplicationDto dto) {
+        log.debug("Create application for user: {}", dto.getGithubUser());
+        return applicationService.createAndSendApplication(dto);
     }
 }

@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.Modifying;
 
 public interface PastProjectRepository extends JpaRepository<PastProject, Long> {
     @Modifying
-    void deleteAllByAndApplicationId(Long applicationId);
+    void deleteAllByApplicationId(Long applicationId);
 }

@@ -30,19 +30,19 @@ public class ApplicationController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    ApplicationDto createApplication(@RequestBody @Valid ApplicationDto dto) {
+    public ApplicationDto createApplication(@RequestBody @Valid ApplicationDto dto) {
         log.debug("Create application for user: {}", dto.getEmail());
         return applicationService.createAndSendApplication(dto);
     }
 
     @GetMapping
-    List<ApplicationDto> findAllApplications() {
+    public List<ApplicationDto> findAllApplications() {
         log.debug("Finding all application");
         return applicationService.findAllApplications();
     }
 
     @GetMapping(value = "/{applicationId}/reports/pdf", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
-    ResponseEntity<Resource> generatePdfReport(@PathVariable Long applicationId) {
+    public ResponseEntity<Resource> generatePdfReport(@PathVariable Long applicationId) {
         log.debug("Generate PDF report for application: {}", applicationId);
 
         Resource resource = applicationService.generatePdfReport(applicationId);

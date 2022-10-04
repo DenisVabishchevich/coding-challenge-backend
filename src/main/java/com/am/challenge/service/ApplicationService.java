@@ -27,9 +27,10 @@ public class ApplicationService {
     public ApplicationDto createAndSendApplication(ApplicationDto dto) {
 
         // remove previous application if exists
-        applicationRepository.findByNameAndEmail(dto.getName(), dto.getEmail())
+        applicationRepository
+            .findByNameAndEmail(dto.getName(), dto.getEmail())
             .ifPresent(existingApplication -> {
-                pastProjectRepository.deleteAllByAndApplicationId(existingApplication.getId());
+                pastProjectRepository.deleteAllByApplicationId(existingApplication.getId());
                 applicationRepository.delete(existingApplication);
                 applicationRepository.flush();
             });
@@ -37,7 +38,9 @@ public class ApplicationService {
         // create new application
         Application application = mapper.toEntity(dto);
         Application savedApplication = applicationRepository.save(application);
-        application.getProjects().forEach(pastProject -> pastProject.setApplication(savedApplication));
+        application
+            .getProjects()
+            .forEach(pastProject -> pastProject.setApplication(savedApplication));
         pastProjectRepository.saveAll(application.getProjects());
         ApplicationDto response = mapper.toDto(savedApplication);
 
@@ -55,7 +58,8 @@ public class ApplicationService {
 
     @Transactional(readOnly = true)
     public Resource generatePdfReport(Long applicationId) {
-        Application application = applicationRepository.findById(applicationId)
+        Application application = applicationRepository
+            .findById(applicationId)
             .orElseThrow(() -> new RuntimeException("Application with id: " + applicationId + " is not found"));
         try {
             return documentService.generateApplicationPdf(application).get();

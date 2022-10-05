@@ -8,7 +8,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
 
@@ -31,7 +30,7 @@ public class GitHubService {
                 .getBody()
                 .getInputStream();
         } catch (Exception e) {
-            throw new RuntimeException("Error getting avatar for user: " + username);
+            throw new RuntimeException("Error getting avatar for user: " + username, e);
         }
     }
 }
